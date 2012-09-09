@@ -26,6 +26,6 @@ do
   sim_score=$(python score.py  "$t" "$yt_title") ;
 
   yt_id=$(curl -s --data-urlencode "search_query=$t" http://www.youtube.com/results |grep yt-lockup-content | head -1 | sed s/^.*watch...//  | sed s/\".*//) ;
-  youtube-dl  $yt_id ;
-  ffmpeg -i $yt_id.flv -vn -ar 44100 -ac 2 -ab 128k -f mp3 "$t"_"$sim_score".mp3 </dev/null; 
+  fn=$(echo "$t"_"$sim_score"  | tr " " "_" | tr "?" "_");
+  youtube-dl -k --extract-audio -o $fn $yt_id  ;
 done < /tmp/tracks
